@@ -1,10 +1,17 @@
 package com.yhl.pinkMan.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 /**
  * 通用协议
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BaseFrame {
 
   /**

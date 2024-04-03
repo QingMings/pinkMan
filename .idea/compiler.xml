@@ -10,5 +10,8 @@
         <module name="pinkMan" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="pinkMan" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

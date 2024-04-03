@@ -1,20 +1,30 @@
 package com.yhl.pinkMan.handler;
 
 import com.google.common.collect.HashBiMap;
-import com.google.protobuf.InvalidProtocolBufferException;
 
+import com.yhl.pinkMan.domain.BaseFrame;
 import com.yhl.pinkMan.protocol.FrameParser;
+import com.yhl.pinkMan.util.EnumUtils;
+import com.yhl.pinkMan.util.ProtocolCodeEnum;
 import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.NetSocket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TcpConnectionHandlerImpl implements TcpConnectionHandler {
-  private static Logger logger = LoggerFactory.getLogger(TcpConnectionHandlerImpl.class);
-  private Vertx vertx;
+public class
 
-  private HashBiMap<NetSocket, String> socketMap = HashBiMap.create();
+
+
+
+
+TcpConnectionHandlerImpl implements TcpConnectionHandler {
+  private final static Logger logger = LoggerFactory.getLogger(TcpConnectionHandlerImpl.class);
+  private final Vertx vertx;
+
+  private final HashBiMap<NetSocket, String> socketMap = HashBiMap.create();
 
   public TcpConnectionHandlerImpl(Vertx vertx) {
     this.vertx = vertx;
@@ -31,14 +41,12 @@ public class TcpConnectionHandlerImpl implements TcpConnectionHandler {
         return;
       }
       Object object = res.result();
-      byte[] bytes = (byte[])object;
-//      try {
-//
-////        System.out.println(person);
-//      } catch (InvalidProtocolBufferException e) {
-//        e.printStackTrace();
-//      }
-      System.out.println(res.result());
+
+      JsonObject  frameData = Buffer.buffer((byte[]) object).toJsonObject();
+      BaseFrame baseFrame = frameData.mapTo(BaseFrame.class);
+      logger.info("接收到消息："+ baseFrame.toString());
+      ProtocolCodeEnum protocolCodeEnum = EnumUtils.valueOf(ProtocolCodeEnum.class, baseFrame.getProtocolCode());
+
     });
     netSocket.exceptionHandler((exception) -> {
       logger.error("The TCP server caught a TCP socket error - closing connection", exception);
